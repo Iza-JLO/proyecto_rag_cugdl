@@ -2,3 +2,9 @@
 *.jpg
 *.png
 *.pdf
+# ChromaDB
+chroma/
+persist_directory/
+*.sqlite3
+*.parquet
+*.bin
