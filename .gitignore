@@ -8,3 +8,10 @@ persist_directory/
 *.sqlite3
 *.parquet
 *.bin
+
+# Bases de datos vectoriales
+chrome_langchain_db/
+
+# Python basura
+__pycache__/
+*.pyc
