@@ -2,7 +2,6 @@ from langchain_ollama.llms import OllamaLLM
 from langchain_core.prompts import ChatPromptTemplate
 from base import retriever
 
-print("El script sí se ejecutó")
 
 model = OllamaLLM(model="qwen3:4b")
 
@@ -20,6 +19,8 @@ Aquí está la pregunta: {pregunta}
 prompt = ChatPromptTemplate.from_template(template)
 chain = prompt | model
 
+
+"""
 while True:
     print("*"*100)
     question = input("Escribe tu pregunta: (Presiona q para salir)")
@@ -31,3 +32,30 @@ while True:
     )
     result = chain.invoke({"informacion": informacion, "pregunta": question})
     print(result)
+
+    """
+
+def ejecutar_rag(pregunta):
+    docs = retriever.invoke(pregunta)
+
+    contexts = [
+    f"""
+    Description:
+    {doc.page_content}
+    """
+    for doc in docs
+]
+    contexts_text = "\n\n".join(contexts)
+
+    result = chain.invoke({
+        "informacion": contexts_text,
+        "pregunta" : pregunta
+    })
+    
+    answer = result
+
+    return {
+        "question": pregunta,
+        "answer": answer,
+        "contexts": contexts
+    }
