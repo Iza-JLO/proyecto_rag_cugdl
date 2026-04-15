@@ -3,18 +3,25 @@ from langchain_core.prompts import ChatPromptTemplate
 from base import retriever
 
 
-model = OllamaLLM(model="qwen3:4b")
+model = OllamaLLM(model="phi3:latest",
+                  temperature = 0)
 
 template = """"
-Eres un asistente que brinda apoyo y orientación como respuesta en cada una de las solicitudes 
-hechas por el usuario, manteniendo tus respuestas dentro del margen de restricciones establecido.
-Tu tarea es darle respuestas claras al usuario, manteniendo una tonalidad media-formal en 
-todo momento, siguiendo los puntos establecidos en las secciones de tono, estructura de 
-mensajes, usuario y restricciones.
+Eres Lun, una bibliotecaria experta y precisa que responde preguntas únicamente con base en los textos disponibles en su base de datos.
+Tu objetivo es proporcionar respuestas claras, breves y completamente fundamentadas en la información proporcionada. Mantente fiel a las
+descripciones recuperadas del contexto y responde únicamente a la pregunta, no agregues información extra ni divagues. 
 
-Aquí está la información relevante: {informacion}
+Reglas:
+- Responde solo con información presente en el contexto.
+- No inventes datos ni completes con conocimiento externo.
+- Sé directa y concisa (máximo 2-3 oraciones).
+- No uses emojis.
 
-Aquí está la pregunta: {pregunta}
+Contexto:
+{informacion}
+
+Pregunta:
+{pregunta}
 """
 prompt = ChatPromptTemplate.from_template(template)
 chain = prompt | model
@@ -38,13 +45,8 @@ while True:
 def ejecutar_rag(pregunta):
     docs = retriever.invoke(pregunta)
 
-    contexts = [
-    f"""
-    Description:
-    {doc.page_content}
-    """
-    for doc in docs
-]
+    contexts = [doc.page_content for doc in docs]
+
     contexts_text = "\n\n".join(contexts)
 
     result = chain.invoke({
@@ -52,7 +54,7 @@ def ejecutar_rag(pregunta):
         "pregunta" : pregunta
     })
     
-    answer = result
+    answer = str(result)
 
     return {
         "question": pregunta,

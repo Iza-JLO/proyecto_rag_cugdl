@@ -10,7 +10,7 @@ db_path = "./chrome_langchain_db"
 add_documents = not os.path.exists(db_path)
 
 # Leer PDF
-reader = PdfReader(r"C:\Users\karol\Documents\proyecto_rag_cugdl\Cuento.pdf")
+reader = PdfReader(r"C:\Users\karol\Documents\proyecto_rag_cugdl\La ciudad de los recuerdos.pdf")
 texto = ""
 
 if add_documents:
@@ -24,7 +24,6 @@ if add_documents:
 
     chunks = text_splitter.split_text(texto)
 
-    # Crear documentos
     documents = [
         Document(
             page_content=chunk,
