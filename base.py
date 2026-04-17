@@ -5,12 +5,12 @@ from langchain_text_splitters import RecursiveCharacterTextSplitter
 import os 
 from pypdf import PdfReader
 
-embedding = OllamaEmbeddings(model="all-minilm:l6-v2")
+embedding = OllamaEmbeddings(model="all-minilm:l6-v2")  #<--- Aquí debe sustituirse el modelo Embeddings de Ollama que se desea usar 
 db_path = "./chrome_langchain_db"
 add_documents = not os.path.exists(db_path)
 
 # Leer PDF
-reader = PdfReader(r"C:\Users\karol\Documents\proyecto_rag_cugdl\La ciudad de los recuerdos.pdf")
+reader = PdfReader(r"C:\Users\karol\Documents\proyecto_rag_cugdl\data\Capítulo 10.pdf")
 texto = ""
 
 if add_documents:
@@ -28,7 +28,7 @@ if add_documents:
         Document(
             page_content=chunk,
             metadata={
-                'source': "La ciudad de los recuerdos",
+                'source': "Capitulo 10: Agujeros de Gusano y Viajes en el Tiempo",
                 'chunk_id': i
             }
         )
